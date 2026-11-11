@@ -8,6 +8,7 @@ on:
 
 jobs:
   testes:
+    name: Testes Python
     runs-on: ubuntu-latest
     steps:
       - name: Baixar o código
@@ -23,3 +24,25 @@ jobs:
 
       - name: Rodar os testes
         run: pytest
+
+  terraform:
+    name: Validar Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar o Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Checar formatação
+        run: terraform fmt -check
+
+      - name: Inicializar
+        run: terraform init -backend=false
+
+      - name: Validar
+        run: terraform validate
